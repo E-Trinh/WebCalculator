@@ -1,0 +1,71 @@
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    width: 400px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px;
+    border-radius: 20px;
+    padding: 40px;
+}
+
+.screen {
+    flex: 1;
+}
+
+.keypad {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.keypad-row {
+    flex: 1;
+    display: flex;
+}
+
+.operand {
+    flex: 1;
+    background-color: #b3cdce;
+    color: #325E34;
+}
+
+.zero {
+    flex: 2;
+    background-color: #b3cdce;
+    color: #325E34;
+}
+
+.operator {
+    flex: 1;
+    background-color: #cebab3;
+    color: #275C26;
+}
+
+.del,
+.backspace {
+    flex: 1;
+    background-color: #cc0000;
+    color: #3DEB34
+}
+
+.backspace {
+    flex: 2;
+}
+
+.equal {
+    flex: 1;
+    background-color: #3DEB35;
+    color: #000000;
+}

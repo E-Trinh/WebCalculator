@@ -17,7 +17,9 @@ operandButtons.forEach((operand) => {
             display.textContent = "";
             clearDisplayFlag = false;
         }
-        display.textContent = display.textContent + e.target.textContent;
+        if (display.textContent.length < 27) {
+            display.textContent = display.textContent + e.target.textContent;
+        }
     });
 });
 
@@ -28,7 +30,7 @@ zeroButton.addEventListener("click", (e) => {
         display.textContent = "";
         clearDisplayFlag = false;
     }
-    if (display.textContent != "0") {
+    if (display.textContent != "0" && display.textContent.length < 27) {
         display.textContent = display.textContent + e.target.textContent;
     }
 });
@@ -40,7 +42,7 @@ decimalButton.addEventListener("click", (e) => {
         display.textContent = "";
         clearDisplayFlag = false;
     }
-    if (!(display.textContent.indexOf(".") > -1)) {
+    if (!(display.textContent.indexOf(".") > -1) && display.textContent.length < 27) {
         display.textContent = display.textContent + e.target.textContent;
     }
 });
@@ -48,14 +50,16 @@ decimalButton.addEventListener("click", (e) => {
 //sets event listener on operator buttons, saves the operand in display and sets the operator variables
 const operatorButtons = document.querySelectorAll(".operator");
 operatorButtons.forEach((operatorButton) => {
-        operatorButton.addEventListener("click", (e) => {
-        if (operandOne != undefined && operator != undefined) {
-            calculate()
-            operator = e.target.textContent;
-        } else {
-            operator = e.target.textContent;
-            operandOne = parseFloat(display.textContent);
-            display.textContent = "";
+    operatorButton.addEventListener("click", (e) => {
+        if (display.textContent != "") {
+            if (operandOne != undefined && operator != undefined) {
+                calculate()
+                operator = e.target.textContent;
+            } else {
+                operator = e.target.textContent;
+                operandOne = parseFloat(display.textContent);
+                display.textContent = "";
+            }
         }
     });
 });
@@ -91,16 +95,16 @@ function reset() {
 function calculate() {
     operandTwo = parseFloat(display.textContent);
     result = operate(operandOne, operandTwo, operator);
-    if (result != "Invalid operation") {
+    if (result == "Invalid operation" || result == NaN) {
+        reset();
+        display.textContent = result;
+        clearDisplayFlag = true;
+    } else {
         addHistory(operandOne, operandTwo, operator, result);
         display.textContent = result;
         operandOne = result;
         operator = undefined;
         operandTwo = undefined;
-        clearDisplayFlag = true;
-    } else {
-        reset();
-        display.textContent = result;
         clearDisplayFlag = true;
     }
 }

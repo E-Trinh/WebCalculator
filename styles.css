@@ -24,6 +24,10 @@
     flex: 1;
 }
 
+.screen p {
+    text-align: right;
+}
+
 .keypad {
     flex: 5;
     display: flex;
@@ -47,6 +51,12 @@
     color: #325E34;
 }
 
+.decimal {
+    flex: 1;
+    background-color: #cebab3;
+    color: #275C26;
+}
+
 .operator {
     flex: 1;
     background-color: #cebab3;
@@ -62,7 +72,7 @@
 
 .backspace {
     flex: 2;
-    
+
 }
 
 .equal {

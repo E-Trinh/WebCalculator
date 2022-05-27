@@ -1,6 +1,6 @@
 //stores the operands and operators for calculations
-let operandOne = 0;
-let operandTwo = 0;
+let operandOne = undefined;
+let operandTwo = undefined;
 let operator;
 
 //when the flag is true: the next time an operand button is pressed, the display is cleared
@@ -49,24 +49,22 @@ decimalButton.addEventListener("click", (e) => {
 const operatorButtons = document.querySelectorAll(".operator");
 operatorButtons.forEach((operatorButton) => {
         operatorButton.addEventListener("click", (e) => {
-        operator = e.target.textContent;
-        operandOne = parseFloat(display.textContent);
-        display.textContent = "";
+        if (operandOne != undefined && operator != undefined) {
+            calculate()
+            operator = e.target.textContent;
+        } else {
+            operator = e.target.textContent;
+            operandOne = parseFloat(display.textContent);
+            display.textContent = "";
+        }
     });
 });
 
 //gets both operands and operations and calculates result, then sets up calculator for next calculation
 const equalButton = document.querySelector(".equal");
-equalButton.addEventListener("click", (e) => {
-    operandTwo = parseFloat(display.textContent);
-    result = operate(operandOne, operandTwo, operator);
-    display.textContent = result;
-    operandOne = result;
-    operator = undefined;
-    operandTwo = 0;
-    clearDisplayFlag = true;
-});
+equalButton.addEventListener("click", calculate);
 
+//checks if display needs to be cleared then if display has contents, then remove the leftmost character
 const backspaceButton = document.querySelector(".backspace");
 backspaceButton.addEventListener("click", () => {
     if (clearDisplayFlag) {
@@ -82,11 +80,37 @@ clearButton.addEventListener("click", reset);
 
 //resets calculator
 function reset() {
-    operandOne = 0;
+    operandOne = undefined;
     operator = undefined;
-    operandTwo = 0;
+    operandTwo = undefined;
     display.textContent = "";
     clearDisplayFlag = false;
+}
+
+//gets both operands and operations and calculates result, then sets up calculator for next calculation
+function calculate() {
+    operandTwo = parseFloat(display.textContent);
+    result = operate(operandOne, operandTwo, operator);
+    if (result != "Invalid operation") {
+        addHistory(operandOne, operandTwo, operator, result);
+        display.textContent = result;
+        operandOne = result;
+        operator = undefined;
+        operandTwo = undefined;
+        clearDisplayFlag = true;
+    } else {
+        reset();
+        display.textContent = result;
+        clearDisplayFlag = true;
+    }
+}
+
+//adds a calculation to history
+function addHistory(operandOne, operandTwo, operator, result) {
+    const calculationText = document.createElement("p");
+    calculationText.textContent = operandOne + " " + operator + " " + operandTwo + " = " + result;
+    const historyDiv = document.querySelector(".history");
+    historyDiv.appendChild(calculationText)
 }
 
 // takes 2 operands and an operator and performs a calculation
@@ -97,9 +121,9 @@ function operate(operandOne, operandTwo, operator) {
         return operandOne - operandTwo;
     } else if (operator === "*") {
         return operandOne * operandTwo;
-    } else if(operator === "/") {
+    } else if(operator === "/" && operandTwo != 0) {
         return operandOne / operandTwo;
     } else {
-        return "Invalid operator";
+        return "Invalid operation";
     }
 }
